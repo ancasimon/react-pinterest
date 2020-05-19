@@ -30,7 +30,7 @@ class MyNavbar extends React.Component {
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
                 {
-                  authed 
+                  authed
                     ? <button className="btn btn-light nav-link" onClick={this.logMeOut}>Log Out</button>
                     : ''
                 }
