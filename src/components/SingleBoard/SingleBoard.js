@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Pin from '../Pin/Pin';
+import PinForm from '../PinForm/PinForm';
 
 import boardsData from '../../helpers/data/boardsData';
 import pinsData from '../../helpers/data/pinsData';
@@ -17,6 +18,7 @@ class SingleBoard extends React.Component {
   state = {
     board: {},
     pins: [],
+    pinFormOpen: false,
   }
 
   getInfo = () => {
@@ -41,9 +43,18 @@ class SingleBoard extends React.Component {
       .catch((err) => console.error('could not delete the pin', err));
   }
 
+  saveNewPin = (newPin) => {
+    pinsData.savePin(newPin)
+      .then(() => {
+        this.getInfo();
+        this.setState({ pinFormOpen: false });
+      })
+      .catch((err) => console.error('could not create pin', err));
+  }
+
   render() {
-    const { setSingleBoard } = this.props;
-    const { board, pins } = this.state;
+    const { setSingleBoard, boardId } = this.props;
+    const { board, pins, pinFormOpen } = this.state;
 
     const makePins = pins.map((eachPin) => <Pin key={eachPin.id} pin={eachPin} removePin={this.removePin} />);
 
@@ -52,6 +63,8 @@ class SingleBoard extends React.Component {
         <button className="btn btn-dark" onClick={() => { setSingleBoard(''); }}>X</button>
         <h2>{board.name} Board</h2>
         <h3>{board.description}</h3>
+        <button className="btn btn-warning" onClick={() => this.setState({ pinFormOpen: true })}>Add a Pin</button>
+        { pinFormOpen ? <PinForm boardId={boardId} saveNewPin={this.saveNewPin} /> : '' }
         <div className="d-flex flex-wrap">
           {makePins}
         </div>
