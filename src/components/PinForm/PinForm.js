@@ -8,6 +8,7 @@ import './PinForm.scss';
 class PinForm extends React.Component {
   static propTypes = {
     boardId: PropTypes.string.isRequired,
+    saveNewPin: PropTypes.func.isRequired,
   }
 
   state = {
@@ -28,14 +29,14 @@ class PinForm extends React.Component {
   savePin = (e) => {
     e.preventDefault();
     const { pinImageUrl, pinName } = this.state;
-    const { boardId } = this.props;
+    const { boardId, saveNewPin } = this.props;
     const newPin = {
       boardId,
-      name: pinName,
+      title: pinName,
       imageUrl: pinImageUrl,
       uid: authData.getUid(),
     };
-    console.log('new pin', newPin);
+    saveNewPin(newPin);
   }
 
   render() {
