@@ -17,6 +17,7 @@ class BoardContainer extends React.Component {
   state = {
     boards: [],
     formOpen: false,
+    editBoard: {},
   }
 
   getAllBoards = () => {
@@ -44,16 +45,32 @@ class BoardContainer extends React.Component {
       .catch((err) => console.error('could not create board', err));
   }
 
+  putBoard = (boardId, updatedBoard) => {
+    boardsData.updateBoard(boardId, updatedBoard)
+      .then(() => {
+        this.getAllBoards();
+        this.setState({ formOpen: false, editBoard: {} });
+      })
+      .catch((err) => console.error('could not update board', err));
+  }
+
+  editABoard = (board) => {
+    // we need this function to take in a board and then update state because that's how we get it into the Board Component
+    // 1 - we need to the form to open:
+    this.setState({ formOpen: true, editBoard: board });
+    // 23 - we will create a new variable in state called editboard - which is emotyinitially but then we set it to the bpoard we are aediting. 
+  }
+
   render() {
-    const { boards, formOpen } = this.state;
+    const { boards, formOpen, editBoard } = this.state;
     const { setSingleBoard } = this.props;
-    const makeBoards = boards.map((board) => <Board key={board.id} board={board} setSingleBoard={setSingleBoard} removeBoard={this.removeBoard} />);
+    const makeBoards = boards.map((board) => <Board key={board.id} board={board} setSingleBoard={setSingleBoard} removeBoard={this.removeBoard} editABoard={this.editABoard} />);
 
     return (
       <div className="BoardContainer">
         <h2>Boards</h2>
         <button className="btn btn-success" onClick={() => this.setState({ formOpen: true })}>Add Board</button>
-        { formOpen ? <BoardForm saveNewBoard={this.saveNewBoard} /> : ''}
+        { formOpen ? <BoardForm saveNewBoard={this.saveNewBoard} board={editBoard} putBoard={this.putBoard} /> : ''}
         <div className="d-flex flex-wrap">
           {makeBoards}
         </div>
