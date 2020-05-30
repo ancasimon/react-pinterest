@@ -14,6 +14,14 @@ class PinForm extends React.Component {
   state = {
     pinName: '',
     pinImageUrl: '',
+    isEditing: false,
+  }
+
+  componentDidMount() {
+    const { pin } = this.props;
+    if (pin.title) {
+      this.setState({ pinName: pin.title, pinImageUrl: pin.imageUrl, isEditing: true });
+    }
   }
 
   pinNameChange = (e) => {
@@ -39,8 +47,21 @@ class PinForm extends React.Component {
     saveNewPin(newPin);
   }
 
-  render() {
+  updatePin = (e) => {
+    e.preventDefault();
     const { pinImageUrl, pinName } = this.state;
+    const { boardId, putPin, pin } = this.props;
+    const updatedPin = {
+      boardId,
+      title: pinName,
+      imageUrl: pinImageUrl,
+      uid: authData.getUid(),
+    };
+    putPin(pin.id, updatedPin);
+  }
+
+  render() {
+    const { pinImageUrl, pinName, isEditing } = this.state;
 
     return (
       <div className="PinForm">
@@ -65,7 +86,11 @@ class PinForm extends React.Component {
               onChange={this.pinImageUrlChange}
               />
           </div>
-          <button className="btn btn-warning" onClick={this.savePin}>Save Pin</button>
+          {
+            isEditing
+              ? <button className="btn btn-primary" onClick={this.updatePin}>Update Pin</button>
+              : <button className="btn btn-warning" onClick={this.savePin}>Save Pin</button>
+          }
         </form>
       </div>
     );
