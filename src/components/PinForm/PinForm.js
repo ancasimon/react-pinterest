@@ -9,6 +9,8 @@ class PinForm extends React.Component {
   static propTypes = {
     boardId: PropTypes.string.isRequired,
     saveNewPin: PropTypes.func.isRequired,
+    putPin: PropTypes.func.isRequired,
+    pin: PropTypes.object.isRequired,
   }
 
   state = {
