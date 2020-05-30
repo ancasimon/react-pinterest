@@ -9,12 +9,19 @@ class Pin extends React.Component {
   static propTypes = {
     pin: pinShape.pinShape,
     removePin: PropTypes.func.isRequired,
+    editAPin: PropTypes.func.isRequired,
   }
 
   deletePinEvent = (e) => {
     e.preventDefault();
     const { pin, removePin } = this.props;
     removePin(pin.id);
+  }
+
+  editPinEvent = (e) => {
+    e.preventDefault();
+    const { pin, editAPin } = this.props;
+    editAPin(pin);
   }
 
   render() {
@@ -26,6 +33,7 @@ class Pin extends React.Component {
           <img src={pin.imageUrl} className="card-img-top" alt="pin" />
           <div className="card-body">
             <h5 className="card-title">{pin.title}</h5>
+            <button className="btn btn-primary" onClick={this.editPinEvent}>Edit Pin</button>
             <button className="btn btn-danger" onClick={this.deletePinEvent}>Delete</button>
           </div>
         </div>
