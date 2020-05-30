@@ -1,6 +1,5 @@
 import axios from 'axios';
 import apiKeys from '../apiKeys.json';
-import boardShape from '../propz/boardShape';
 
 const baseUrl = apiKeys.firebaseKeys.databaseURL;
 
@@ -27,9 +26,12 @@ const deleteBoard = (boardId) => axios.delete(`${baseUrl}/boards/${boardId}.json
 
 const saveBoard = (newBoard) => axios.post(`${baseUrl}/boards.json`, newBoard);
 
+const updateBoard = (boardId, updatedBoard) => axios.put(`${baseUrl}/boards/${boardId}.json`, updatedBoard);
+
 export default {
   getBoardsByUid,
   getSingleBoard,
   deleteBoard,
   saveBoard,
+  updateBoard,
 };
